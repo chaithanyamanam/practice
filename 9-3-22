@@ -1,0 +1,261 @@
+
+SQL*Plus: Release 10.2.0.1.0 - Beta on Wed Mar 9 14:07:10 2022
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+SQL> connect
+Enter user-name: system
+Enter password:
+Connected.
+SQL> create table stu(sno number(10),sname char(20),sph varchar2(10),sgroup char(20));
+
+Table created.
+
+SQL> desc stu;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SNO                                                NUMBER(10)
+ SNAME                                              CHAR(20)
+ SPH                                                VARCHAR2(10)
+ SGROUP                                             CHAR(20)
+
+SQL> select * from stu;
+
+no rows selected
+
+SQL> insert into stu(sno,sname,sph,sgroup)values(&sno,'&sname',&sph,'&sgroup');
+Enter value for sno: 1
+Enter value for sname: chaithu
+Enter value for sph: 1234567890
+Enter value for sgroup: mecs
+old   1: insert into stu(sno,sname,sph,sgroup)values(&sno,'&sname',&sph,'&sgroup')
+new   1: insert into stu(sno,sname,sph,sgroup)values(1,'chaithu',1234567890,'mecs')
+
+1 row created.
+
+SQL> /
+Enter value for sno: 2
+Enter value for sname: jai
+Enter value for sph: 9876543210
+Enter value for sgroup: mpcs
+old   1: insert into stu(sno,sname,sph,sgroup)values(&sno,'&sname',&sph,'&sgroup')
+new   1: insert into stu(sno,sname,sph,sgroup)values(2,'jai',9876543210,'mpcs')
+
+1 row created.
+
+SQL> /
+Enter value for sno: 3
+Enter value for sname: raj
+Enter value for sph: mbbs
+Enter value for sgroup: mbbs
+old   1: insert into stu(sno,sname,sph,sgroup)values(&sno,'&sname',&sph,'&sgroup')
+new   1: insert into stu(sno,sname,sph,sgroup)values(3,'raj',mbbs,'mbbs')
+insert into stu(sno,sname,sph,sgroup)values(3,'raj',mbbs,'mbbs')
+                                                    *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> /
+Enter value for sno: 3
+Enter value for sname: raji
+Enter value for sph: 564738291
+Enter value for sgroup: bipc
+old   1: insert into stu(sno,sname,sph,sgroup)values(&sno,'&sname',&sph,'&sgroup')
+new   1: insert into stu(sno,sname,sph,sgroup)values(3,'raji',564738291,'bipc')
+
+1 row created.
+
+SQL> select * from stu;
+
+       SNO SNAME                SPH        SGROUP
+---------- -------------------- ---------- --------------------
+         1 chaithu              1234567890 mecs
+         2 jai                  9876543210 mpcs
+         3 raji                 564738291  bipc
+
+SQL> select sno,sname from stu;
+
+       SNO SNAME
+---------- --------------------
+         1 chaithu
+         2 jai
+         3 raji
+
+SQL> alter table stu drop column sph;
+
+Table altered.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP
+---------- -------------------- --------------------
+         1 chaithu              mecs
+         2 jai                  mpcs
+         3 raji                 bipc
+
+SQL> alter table stu add (sfee number(10));
+
+Table altered.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs
+         2 jai                  mpcs
+         3 raji                 bipc
+
+SQL> update stu set sfee=2000 where sno=1;
+
+1 row updated.
+
+SQL> update stu set sfee=3000 where sno=2;
+
+1 row updated.
+
+SQL> update stu set sfee=3050 where sno=3;
+
+1 row updated.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       2000
+         2 jai                  mpcs                       3000
+         3 raji                 bipc                       3050
+
+SQL> update stu set sfee=sfee+2000;
+
+3 rows updated.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       4000
+         2 jai                  mpcs                       5000
+         3 raji                 bipc                       5050
+
+SQL> update stu set sfee=sfee+1000 where sfee>5000;
+
+1 row updated.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       4000
+         2 jai                  mpcs                       5000
+         3 raji                 bipc                       6050
+
+SQL> update stu set sfee=sfee+1000 where sfee<5000;
+
+1 row updated.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       5000
+         2 jai                  mpcs                       5000
+         3 raji                 bipc                       6050
+
+SQL> select * from stu order by sfee;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       5000
+         2 jai                  mpcs                       5000
+         3 raji                 bipc                       6050
+
+SQL> update stu set sfee=sfee+1000 where sfee<=5000;
+
+2 rows updated.
+
+SQL> select * from stu order by sfee;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+         3 raji                 bipc                       6050
+
+SQL> update stu set sfee=sfee-1000 where sfee>6000;
+
+1 row updated.
+
+SQL> select * from stu order by sfee;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         3 raji                 bipc                       5050
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+
+SQL> select * from stu order by sno;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+         3 raji                 bipc                       5050
+
+SQL> select * from stu order by sfee desc;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+         3 raji                 bipc                       5050
+
+SQL> select * from stu order by sfee;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         3 raji                 bipc                       5050
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+         3 raji                 bipc                       5050
+
+SQL> delete from stu where sno=3;
+
+1 row deleted.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       6000
+         2 jai                  mpcs                       6000
+
+SQL> delete from stu where sno=2;
+
+1 row deleted.
+
+SQL> select * from stu;
+
+       SNO SNAME                SGROUP                     SFEE
+---------- -------------------- -------------------- ----------
+         1 chaithu              mecs                       6000
+
+SQL> select * from stu;
